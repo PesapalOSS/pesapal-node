@@ -1,0 +1,17 @@
+{
+  "name": "pesapal-js",
+  "version": "0.1.0",
+  "description": "Pespal API wrapper",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.14.5",
+    "tsup": "^6.6.3"
+  }
+}
