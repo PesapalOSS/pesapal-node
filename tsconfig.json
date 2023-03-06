@@ -10,7 +10,8 @@
     "noImplicitThis": true,
     "strict": true,
     "strictFunctionTypes": true,
-    "types": [ "node" ]
+    "resolveJsonModule": true,
   },
-  "include": ["src/*.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
 }
