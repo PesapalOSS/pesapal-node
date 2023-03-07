@@ -1,19 +1,19 @@
-import { SANDBOX_CREDENTIALS } from "./constants";
+import { SANDBOX_CREDENTIALS } from ".";
 
 type SandboxCountry = keyof typeof SANDBOX_CREDENTIALS;
 
-export type APIOpts =
+export type PesapalConfig =
   | {
       sandbox: SandboxCountry;
       consumer_key?: string;
       consumer_secret?: string;
-      ipn_url: string;
+      ipn: string;
     }
   | {
       sandbox: false;
       consumer_key: string;
       consumer_secret: string;
-      ipn_url: string;
+      ipn: string;
     };
 
 export interface GeneralError {
@@ -22,33 +22,32 @@ export interface GeneralError {
   message: string;
 }
 
-export interface AuthReq {
+export interface APICredentials {
+  token: string;
+  expiryDate: Date;
+}
+
+export interface UserCredentials {
   consumer_key: string;
   consumer_secret: string;
 }
 
-export interface AuthRes {
-  token: string;
-  expiryDate: Date;
+export interface AuthRes extends APICredentials {
   error?: GeneralError;
   status: string;
   message: string;
 }
 
-export interface IPNRegisterReq {
+export interface IPN {
+  ipn_id: string;
+  url: string;
+  created_date: Date;
+}
+
+export interface RegisterIPN {
   url: string;
   ipn_notification_type: "GET" | "POST";
 }
-
-export interface IPNRegisterRes {
-  url: string;
-  created_date: Date;
-  ipn_id: string;
-  error?: GeneralError;
-  status: string;
-}
-
-export type IPNGetEndpointsRes = IPNRegisterRes[];
 
 export interface BillingAddress {
   email_address: string;
@@ -65,34 +64,27 @@ export interface BillingAddress {
   zip_code?: string;
 }
 
-export interface SubmitOrderReq {
+export interface CreatePayment {
   id: string;
   currency: string;
   amount: number;
   description: string;
   callback_url: string;
   cancellation_url?: string;
-  notification_id: string;
   billing_address: BillingAddress;
 }
 
-export interface SubmitOrderRes {
-  order_tracking_id: string;
-  merchant_reference: string;
-  redirect_url: string;
-  error?: GeneralError;
-  status: string;
-}
-
-export interface RecurringOrderReq extends SubmitOrderReq {
+export interface CreateSubscription extends CreatePayment {
   account_number: string;
 }
 
-export interface TransactionStatusReq {
-  orderTrackingId: string;
+export interface PaymentRequest {
+  order_tracking_id: string;
+  merchant_reference: string;
+  redirect_url: string;
 }
 
-export interface TransactionStatusRes {
+export interface PaymentStatus {
   payment_method: string;
   amount: number;
   created_date: Date;
@@ -106,6 +98,16 @@ export interface TransactionStatusRes {
   merchant_reference: string;
   payment_status_code: string;
   currency: string;
-  error: GeneralError;
-  status: string;
+}
+
+export interface SubscriptionTransactionInfo {
+  account_reference: string;
+  amount: number;
+  first_name: string;
+  last_name: string;
+  correlation_id: string;
+}
+
+export interface SubscriptionStatus extends PaymentStatus {
+  subscription_transaction_info: SubscriptionTransactionInfo;
 }
