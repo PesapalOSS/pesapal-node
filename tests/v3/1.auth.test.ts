@@ -1,17 +1,18 @@
-import { newPesapal } from "./create-instance";
+import Pesapal from "../../src/v3";
 
-describe("authenticate with API", () => {
-  const pesapal = newPesapal();
+describe("Authenticate with API", () => {
+  const pesapal = new Pesapal({ sandbox: "kenya", ipn: "https://example.com/ipn" });
+  
   test("should perform request successfully", async () => {
-    await pesapal["auth"]();
+    await pesapal["client"]['ensureAuth']();
   });
-  test("api_credentials 'error' field should be null", () => {
-    expect(pesapal["api_credentials"]?.error).toBeNull();
+  test("api_credentials should not be null", () => {
+    expect(pesapal["client"]['api_credentials']).not.toBeNull();
   });
   test("api_credentials 'token' should be provided", () => {
-    expect(pesapal["api_credentials"]?.error).not.toBe("");
+    expect(pesapal["client"]['api_credentials']?.token).not.toBe("");
   });
   test("api_credentials should be valid (can access protected recourses)", async () => {
-    await pesapal.getIPNs();
+    await pesapal.ipns.list();
   });
 });

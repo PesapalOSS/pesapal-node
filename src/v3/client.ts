@@ -31,22 +31,22 @@ export class Client {
     throw new Error(`[${err.code}]: ${err.message}`);
   }
 
-  protected async ensureAuth(credentials: UserCredentials): Promise<APICredentials> {
+  protected async ensureAuth(): Promise<APICredentials> {
     const now = new Date();
     if (!this.api_credentials || this.api_credentials.expiryDate < now)
-      return await this.auth(credentials);
+      return await this.auth();
     return this.api_credentials;
   }
 
-  async auth(credentials: UserCredentials): Promise<APICredentials> {
-    const res = (await this.wretch.url("/api/Auth/RequestToken").post(credentials)) as AuthRes;
+  async auth(): Promise<APICredentials> {
+    const res = (await this.wretch.url("/api/Auth/RequestToken").post(this.user_credentials)) as AuthRes;
     if (res.error) this.errorThrower(res.error);
     this.api_credentials = res;
     return this.api_credentials;
   }
 
   async get(url: string): Promise<unknown> {
-    await this.ensureAuth(this.user_credentials);
+    await this.ensureAuth();
     const res = await this.wretch
       .auth(`Bearer ${this.api_credentials?.token}`)
       .get(url)
@@ -59,7 +59,7 @@ export class Client {
   }
 
   async post(url: string, data: unknown): Promise<unknown> {
-    await this.ensureAuth(this.user_credentials);
+    await this.ensureAuth();
     const res = await this.wretch
       .auth(`Bearer ${this.api_credentials?.token}`)
       .url(url)
