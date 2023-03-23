@@ -63,8 +63,8 @@ const pesapal = new Pesapal({
 });
 ```
 
-| Option          | Default | Description                                                                                                                                                                                                                       |
-| --------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| sandbox         | 'kenya' | Can be any of the sandbox countries for example `kenya` or `uganda` or `tanzania` or `malawi` or `rwanda` or `zambia` or `zimbabwe`. If you set it to `false` then you must provide your own `consumer_key` and `consumer_secret` |
-| consumer_key    | null    | Obtained when you [sign up](https://www.pesapal.com/dashboard/account/register) for an account                                                                                                                                    |
-| consumer_secret | null    | Obtained when you [sign up](https://www.pesapal.com/dashboard/account/register) for an account                                                                                                                                    |
+| Option          | Default | Description                                                                                                                                                                                                     |
+| --------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| sandbox         | 'kenya' | Can be any of the sandbox countries for example `kenya` `uganda` `tanzania` `malawi` `rwanda` `zambia` `zimbabwe`. If you set it to `false` then you must provide your own `consumer_key` and `consumer_secret` |
+| consumer_key    | null    | Obtained when you [sign up](https://www.pesapal.com/dashboard/account/register) for an account                                                                                                                  |
+| consumer_secret | null    | Obtained when you [sign up](https://www.pesapal.com/dashboard/account/register) for an account                                                                                                                  |
