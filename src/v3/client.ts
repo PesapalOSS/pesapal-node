@@ -22,7 +22,7 @@ export class Client {
    */
   constructor(config: PesapalConfig) {
     // FIXME: sandbox env's cloudflare keeps blacklisting
-    const sandbox = true;
+    const sandbox = false;
     this.user_credentials = config.sandbox
       ? SANDBOX_CREDENTIALS[config.sandbox]
       : { consumer_key: config.consumer_key, consumer_secret: config.consumer_key };

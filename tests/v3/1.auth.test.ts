@@ -1,4 +1,4 @@
-import Pesapal from "../../src/v3";
+import Pesapal from "../../dist/v3";
 
 describe("Authenticate with API", () => {
   const pesapal = new Pesapal({ sandbox: "kenya" });
