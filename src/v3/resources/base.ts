@@ -7,7 +7,7 @@ export default class BaseResource {
   /**
    * The `Client` instance to be used for all communication with the Pesapal API.
    */
-  public client: Client;
+  protected client: Client;
 
   /**
    * Creates a new `BaseResource` instance.

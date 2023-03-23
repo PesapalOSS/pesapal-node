@@ -16,13 +16,11 @@ export type PesapalConfig =
       sandbox: SandboxCountry;
       consumer_key?: string;
       consumer_secret?: string;
-      ipn: string;
     }
   | {
       sandbox: false;
       consumer_key: string;
       consumer_secret: string;
-      ipn: string;
     };
 
 /**
