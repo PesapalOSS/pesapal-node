@@ -21,13 +21,12 @@ export class Client {
    * @param config - Pesapal API configuration
    */
   constructor(config: PesapalConfig) {
-    // FIXME: sandbox env's cloudflare keeps blacklisting
-    const sandbox = false;
+    // FIXME: sandbox env's cloudflare blacklists sometimes
     this.user_credentials = config.sandbox
       ? SANDBOX_CREDENTIALS[config.sandbox]
       : { consumer_key: config.consumer_key, consumer_secret: config.consumer_key };
     this.wretch = wretch(
-      sandbox ? "https://cybqa.pesapal.com/pesapalv3" : "https://pay.pesapal.com/v3"
+      config.sandbox ? "https://cybqa.pesapal.com/pesapalv3" : "https://pay.pesapal.com/v3"
     )
       .middlewares([dedupe()])
       .errorType("json")
