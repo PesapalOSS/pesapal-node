@@ -4,12 +4,31 @@ import IPNsResource from "./resources/ipns";
 import PaymentsResource from "./resources/payments";
 import SubscriptionsResource from "./resources/subscriptions";
 
+/**
+ * Pesapal API wrapper
+ */
 class Pesapal {
+  /**
+   * HTTP client used to make requests to the API
+   */
   protected client: Client;
+  /**
+   * Payment Notification (IPN) resource
+   */
   public ipns: IPNsResource;
+  /**
+   * Payment resource
+   */
   public payments: PaymentsResource;
+  /**
+   * Subscription resource
+   */
   public subscriptions: SubscriptionsResource;
 
+  /**
+   * Creates a new instance of the Pesapal API wrapper
+   * @param config - Pesapal API configuration
+   */
   constructor(config: PesapalConfig) {
     this.client = new Client(config);
     this.ipns = new IPNsResource(this.client);
@@ -18,6 +37,9 @@ class Pesapal {
   }
 }
 
+/**
+ * Sandbox credentials for all supported Pesapal countries
+ */
 export const SANDBOX_CREDENTIALS = {
   kenya: {
     consumer_key: "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW",

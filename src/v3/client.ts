@@ -8,14 +8,21 @@ interface Response {
   [key: string]: unknown;
 }
 
+/**
+ * The `Client` class handles all communication with the Pesapal API.
+ */
 export class Client {
   public wretch: Wretch<unknown, unknown, Promise<unknown>>;
   protected api_credentials?: APICredentials;
   private user_credentials: UserCredentials;
 
+  /**
+   * Creates a new `Client` instance.
+   * @param config - Pesapal API configuration
+   */
   constructor(config: PesapalConfig) {
-    // FIXME: sandbox env currently has some issues we will use main env for now
-    const sandbox = false;
+    // FIXME: sandbox env's cloudflare keeps blacklisting
+    const sandbox = true;
     this.user_credentials = config.sandbox
       ? SANDBOX_CREDENTIALS[config.sandbox]
       : { consumer_key: config.consumer_key, consumer_secret: config.consumer_key };
@@ -27,29 +34,48 @@ export class Client {
       .resolve((r) => r.json());
   }
 
+  /**
+   * Handles throwing an error if there is one in the response object.
+   * @param err - The error object to throw.
+   */
   protected errorThrower(err: GeneralError) {
     throw new Error(`[${err.code}]: ${err.message}`);
   }
 
+  /**
+   * Ensures that the client is authorized to access the API, and returns the API credentials.
+   * @returns The API credentials.
+   */
   protected async ensureAuth(): Promise<APICredentials> {
     const now = new Date();
-    if (!this.api_credentials || this.api_credentials.expiryDate < now)
-      return await this.auth();
+    if (!this.api_credentials || this.api_credentials.expiryDate < now) return await this.auth();
     return this.api_credentials;
   }
 
+  /**
+   * Requests API credentials from the Pesapal API.
+   * @returns The API credentials.
+   */
   async auth(): Promise<APICredentials> {
-    const res = (await this.wretch.url("/api/Auth/RequestToken").post(this.user_credentials)) as AuthRes;
+    const res = (await this.wretch
+      .url("/api/Auth/RequestToken")
+      .post(this.user_credentials)
+      .catch((e) => console.log(e.message))) as AuthRes;
     if (res.error) this.errorThrower(res.error);
     this.api_credentials = res;
     return this.api_credentials;
   }
 
-  async get(url: string): Promise<unknown> {
+  /**
+   * Sends a GET request to the Pesapal API.
+   * @param endpoint - The endpoint to send the request to.
+   * @returns The response data from the API.
+   */
+  async get(endpoint: string): Promise<unknown> {
     await this.ensureAuth();
     const res = await this.wretch
       .auth(`Bearer ${this.api_credentials?.token}`)
-      .get(url)
+      .get(endpoint)
       .then((res) => res as Response)
       .catch((e) => {
         throw e;
@@ -58,11 +84,17 @@ export class Client {
     return res;
   }
 
-  async post(url: string, data: unknown): Promise<unknown> {
+  /**
+   * Sends a POST request to the Pesapal API.
+   * @param endpoint - The endpoint to send the request to.
+   * @param data - The data to send in the request body.
+   * @returns The response data from the API. 
+   */
+  async post(endpoint: string, data: unknown): Promise<unknown> {
     await this.ensureAuth();
     const res = await this.wretch
       .auth(`Bearer ${this.api_credentials?.token}`)
-      .url(url)
+      .url(endpoint)
       .post(data)
       .then((res) => res as Response)
       .catch((e) => {
